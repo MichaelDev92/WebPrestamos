@@ -1,0 +1,196 @@
+{
+  "common": {
+    "actions": {
+      "create": "Crear",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "delete": "Eliminar",
+      "edit": "Editar",
+      "search": "Buscar",
+      "close": "Cerrar",
+      "confirm": "Confirmar",
+      "back": "Volver",
+      "next": "Siguiente",
+      "previous": "Anterior",
+      "submit": "Enviar",
+      "retry": "Reintentar"
+    },
+    "states": {
+      "loading": "Cargando...",
+      "empty": "Sin resultados",
+      "error": "Ocurrió un error",
+      "noData": "No hay datos para mostrar"
+    },
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "page": "Página",
+      "of": "de",
+      "showing": "Mostrando",
+      "results": "resultados"
+    },
+    "validation": {
+      "required": "Este campo es obligatorio",
+      "email": "Email inválido",
+      "minLength": "Mínimo {min} caracteres",
+      "maxLength": "Máximo {max} caracteres",
+      "url": "URL inválida",
+      "positiveNumber": "Debe ser mayor a 0",
+      "integer": "Debe ser un número entero"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar sesión",
+      "subtitle": "Accede al panel administrativo",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "submit": "Ingresar",
+      "submitting": "Ingresando...",
+      "invalidCredentials": "Credenciales inválidas",
+      "unauthorized": "No tienes permisos para acceder al dashboard"
+    },
+    "register": {
+      "title": "Registrar usuario",
+      "subtitle": "Crea una nueva cuenta administrativa",
+      "names": "Nombres",
+      "surnames": "Apellidos",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "phoneNumber": "Teléfono",
+      "address": "Dirección",
+      "birthdate": "Fecha de nacimiento",
+      "role": "Rol",
+      "roles": {
+        "user": "Usuario",
+        "admin": "Administrador",
+        "superadmin": "Super administrador"
+      },
+      "submit": "Registrar usuario",
+      "submitting": "Registrando...",
+      "success": "Usuario registrado correctamente",
+      "emailExists": "Ya existe un usuario con este correo"
+    },
+    "logout": "Cerrar sesión",
+    "sessionExpired": "Tu sesión ha expirado, ingresa de nuevo"
+  },
+  "nav": {
+    "overview": "Resumen",
+    "products": "Productos",
+    "productTypes": "Tipos de producto",
+    "registerUser": "Registrar usuario",
+    "clients": "Clientes",
+    "users": "Usuarios"
+  },
+  "overview": {
+    "title": "Resumen general",
+    "subtitle": "Indicadores clave de productos e inventario",
+    "kpis": {
+      "activeProducts": "Productos activos",
+      "totalStock": "Stock total",
+      "inventoryValue": "Valor de inventario"
+    },
+    "charts": {
+      "productsByTypeTitle": "Productos por tipo",
+      "productsByTypeEmpty": "Aún no hay productos registrados"
+    }
+  },
+  "products": {
+    "title": "Productos",
+    "subtitle": "Administra el catálogo de productos",
+    "createButton": "Nuevo producto",
+    "search": "Buscar por nombre o código",
+    "filterByType": "Filtrar por tipo",
+    "allTypes": "Todos los tipos",
+    "columns": {
+      "code": "Código",
+      "name": "Nombre",
+      "type": "Tipo",
+      "brand": "Marca",
+      "model": "Modelo",
+      "stock": "Stock",
+      "salePrice": "Precio venta",
+      "costPrice": "Precio costo",
+      "actions": "Acciones"
+    },
+    "form": {
+      "createTitle": "Crear producto",
+      "editTitle": "Editar producto",
+      "fields": {
+        "name": "Nombre",
+        "code": "Código",
+        "productType": "Tipo de producto",
+        "salePrice": "Precio de venta",
+        "costPrice": "Precio de costo",
+        "stock": "Stock",
+        "barcode": "Código de barras",
+        "brand": "Marca",
+        "model": "Modelo",
+        "description": "Descripción",
+        "imageUrls": "URLs de imágenes",
+        "addImageUrl": "Agregar imagen",
+        "imageUrlPlaceholder": "https://..."
+      }
+    },
+    "delete": {
+      "title": "Eliminar producto",
+      "message": "¿Seguro que quieres eliminar el producto \"{name}\"? Esta acción lo desactiva del catálogo.",
+      "success": "Producto eliminado"
+    },
+    "create": {
+      "success": "Producto creado correctamente",
+      "duplicateCode": "Ya existe un producto con este código"
+    },
+    "update": {
+      "success": "Producto actualizado correctamente"
+    }
+  },
+  "productTypes": {
+    "title": "Tipos de producto",
+    "subtitle": "Gestiona las categorías del catálogo",
+    "createButton": "Nuevo tipo",
+    "search": "Buscar por nombre o código",
+    "columns": {
+      "code": "Código",
+      "name": "Nombre",
+      "notes": "Notas",
+      "actions": "Acciones"
+    },
+    "form": {
+      "createTitle": "Crear tipo de producto",
+      "editTitle": "Editar tipo de producto",
+      "fields": {
+        "name": "Nombre",
+        "code": "Código",
+        "notes": "Notas"
+      }
+    },
+    "delete": {
+      "title": "Eliminar tipo de producto",
+      "message": "¿Seguro que quieres eliminar el tipo \"{name}\"?",
+      "success": "Tipo eliminado",
+      "conflict": "No se puede eliminar: hay productos activos asociados a este tipo"
+    },
+    "create": {
+      "success": "Tipo de producto creado",
+      "duplicateName": "Ya existe un tipo con este nombre",
+      "duplicateCode": "Ya existe un tipo con este código"
+    },
+    "update": {
+      "success": "Tipo de producto actualizado",
+      "conflict": "No se puede desactivar: hay productos activos asociados a este tipo"
+    }
+  },
+  "errors": {
+    "network": "Error de conexión, intenta de nuevo",
+    "server": "Error del servidor",
+    "forbidden": "No tienes permisos para esta acción",
+    "notFound": "Recurso no encontrado",
+    "conflict": "Conflicto con datos existentes",
+    "unknown": "Error inesperado"
+  },
+  "theme": {
+    "toggle": "Cambiar tema",
+    "comingSoon": "Próximamente"
+  }
+}

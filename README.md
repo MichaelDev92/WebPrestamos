@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WebPréstamos · Dashboard
 
-## Getting Started
+Dashboard administrativo (Next.js 16 + React 19) que consume el backend NestJS de préstamos.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Next.js 16 (App Router, Turbopack) + React 19
+- TypeScript estricto
+- CSS Modules + variables CSS (paleta híbrida dark, light preparado)
+- TanStack Query + Zustand (estado server / cliente)
+- Axios sobre proxy interno con rotación de refresh token server-side
+- React Hook Form + Zod
+- Recharts (overview)
+- Lucide para iconos
+- i18n preparado (es, listo para multi-idioma)
+
+## Estructura
+
+```
+src/
+├── app/                       # rutas (App Router)
+│   ├── (auth)/login           # pública
+│   ├── (dashboard)/           # protegida (middleware proxy.ts)
+│   │   ├── overview
+│   │   ├── products
+│   │   ├── product-types
+│   │   └── register           # solo superadmin
+│   └── api/proxy/[...path]    # proxy server-only hacia el backend
+├── features/                  # feature-based: cada dominio aislado
+│   ├── auth
+│   ├── products
+│   ├── product-types
+│   └── overview
+├── shared/
+│   ├── components/            # UI base + dashboard shell
+│   ├── hooks/                 # useSession, useToast, useT, useTheme, useDebounce, usePagination
+│   ├── lib/                   # http, i18n, theme, query, format
+│   └── styles/                # tokens.css, animations.css, globals.css
+├── server/                    # server-only: config, auth (cookies httpOnly, refresh)
+├── types/                     # tipos compartidos (auth)
+├── locales/                   # diccionarios i18n
+└── proxy.ts                   # protección de rutas (Next 16 file convention)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Variables de entorno
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copiar `.env.example` a `.env.local` y completar.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Descripción | Default |
+| --- | --- | --- |
+| `API_URL` | URL base del backend NestJS (server-only, **no se expone al cliente**) | _(requerida)_ |
+| `SESSION_COOKIE_ACCESS` | Nombre de la cookie httpOnly del access token | `wp_at` |
+| `SESSION_COOKIE_REFRESH` | Nombre de la cookie httpOnly del refresh token | `wp_rt` |
+| `COOKIE_SAMESITE` | `lax` en dev, `strict` o `none` en prod según contexto | `lax` |
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm dev        # servidor dev (Turbopack)
+pnpm build      # build producción
+pnpm start      # servir build producción
+pnpm lint       # ESLint
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Flujo de autenticación
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Usuario envía `email + password` a la server action `loginAction`.
+2. Backend `POST /auth/login` devuelve `{ accessToken, refreshToken, user }`.
+3. Server action setea cookies httpOnly + cookie `wp_user` (info no sensible) y devuelve OK.
+4. Toda petición a la API pasa por `/api/proxy/[...path]` (route handler server-only):
+   - Lee `accessToken` server-side y lo añade en `Authorization`.
+   - Si el backend responde `401`, intenta refresh (rota tokens) y reintenta una vez.
+   - Si el refresh falla, limpia cookies y responde `401` (el cliente redirige a `/login`).
+5. `proxy.ts` (file convention de Next 16) protege todas las rutas privadas.
+6. El layout `/(dashboard)` valida adicionalmente el rol del usuario.
 
-## Deploy on Vercel
+## Decisiones de diseño
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Toda la lógica de tokens vive server-side.** El cliente nunca ve el JWT.
+- **Paleta híbrida** (ver `src/shared/styles/tokens.css`): base sobria estilo "Design 1" + glow bioluminiscente y cyan secundario inspirados en "Design 2".
+- **Theme toggle preparado pero bloqueado a `dark`.** Para activar light: eliminar `forceTheme="dark"` en `AppProviders` y agregar el control al `Topbar`.
+- **i18n preparado.** Para agregar un idioma: crear `src/locales/<locale>.json`, registrarlo en `i18n.constants.ts` y `getDictionary.ts`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Alcance MVP
+
+✅ Auth (login + register + logout + refresh rotation)
+✅ Products (CRUD + paginación + filtros)
+✅ Product types (CRUD + integridad referencial)
+✅ Overview con KPIs (productos activos, stock total, valor inventario) + chart productos por tipo
+
+🚧 Pospuesto: dashboard de clients/users, KPIs de risk category, theme toggle activo, multi-idioma.

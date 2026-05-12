@@ -1,0 +1,23 @@
+.card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-shadow);
+  padding: var(--space-6);
+  transition:
+    border-color var(--transition-base),
+    box-shadow var(--transition-base),
+    transform var(--transition-base);
+}
+
+.compact {
+  padding: var(--space-4);
+}
+
+.glow:hover {
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--glow-primary), var(--glass-shadow);
+  transform: translateY(-2px);
+}
