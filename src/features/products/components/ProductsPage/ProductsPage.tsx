@@ -41,7 +41,9 @@ export function ProductsPage() {
   const debouncedSearch = useDebounce(search, 350);
   const [typeFilter, setTypeFilter] = useState<string>("");
   const [view, setView] = useState<ProductView>("table");
-  const pagination = usePagination({ initialLimit: 10 });
+  // 12 por página: divisible por 2/3/4/6 → los grids de cards reparten filas
+  // completas en cualquier ancho (evita huecos en la vista de cards grandes).
+  const pagination = usePagination({ initialLimit: 12 });
 
   useEffect(() => {
     pagination.setPage(1);

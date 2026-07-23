@@ -67,16 +67,54 @@
   padding: var(--space-4);
 }
 
+/* Columnas fijas responsivas (divisores de 12, el tamaño de página) para que las
+   filas siempre queden completas y parejas, sin los huecos del `auto-fill`. */
 .cardsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: var(--space-3);
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .galleryGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: var(--space-4);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .cardsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .galleryGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .galleryGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .cardsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1400px) {
+  .galleryGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1600px) {
+  .cardsGrid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  .galleryGrid {
+    grid-template-columns: repeat(6, 1fr);
+  }
 }
 
 .emptyWrap {
