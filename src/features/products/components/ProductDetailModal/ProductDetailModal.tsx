@@ -49,21 +49,8 @@ export function ProductDetailModal({ product, open, onClose }: ProductDetailModa
   const current = images[index];
   const showImage = Boolean(current) && !failed[index];
 
-  const fields: Array<{ label: string; value: string | null }> = [
-    { label: t("products.columns.code"), value: product.code },
-    { label: t("products.columns.type"), value: product.productType?.name ?? null },
-    { label: t("products.columns.brand"), value: product.brand ?? null },
-    { label: t("products.columns.model"), value: product.model ?? null },
-    { label: t("products.columns.salePrice"), value: formatCurrency(product.salePrice) },
-    {
-      label: t("products.columns.costPrice"),
-      value: product.costPrice != null ? formatCurrency(product.costPrice) : null,
-    },
-    { label: t("products.columns.stock"), value: formatNumber(product.stock) },
-  ];
-
   return (
-    <Modal open={open} onClose={onClose} title={product.name} size="lg">
+    <Modal open={open} onClose={onClose} size="lg">
       <div className={styles.layout}>
         <div className={styles.carousel} aria-label={t("products.detail.images")}>
           <div className={styles.stage}>
@@ -120,14 +107,37 @@ export function ProductDetailModal({ product, open, onClose }: ProductDetailModa
         </div>
 
         <div className={styles.info}>
-          <dl className={styles.grid}>
-            {fields.map((field) => (
-              <div key={field.label} className={styles.field}>
-                <dt>{field.label}</dt>
-                <dd>{field.value ?? "—"}</dd>
-              </div>
-            ))}
+          <div className={styles.head}>
+            {product.productType?.name && (
+              <span className={styles.typeBadge}>{product.productType.name}</span>
+            )}
+            <h2 className={styles.name}>{product.name}</h2>
+            <span className={styles.code}>{product.code}</span>
+          </div>
+
+          <div className={styles.priceRow}>
+            <span className={styles.price}>{formatCurrency(product.salePrice)}</span>
+            {product.costPrice != null && (
+              <span className={styles.cost}>
+                {t("products.columns.costPrice")}: {formatCurrency(product.costPrice)}
+              </span>
+            )}
+            <span className={styles.stock}>
+              {t("products.columns.stock")}: <strong>{formatNumber(product.stock)}</strong>
+            </span>
+          </div>
+
+          <dl className={styles.specs}>
+            <div className={styles.spec}>
+              <dt>{t("products.columns.brand")}</dt>
+              <dd>{product.brand || "—"}</dd>
+            </div>
+            <div className={styles.spec}>
+              <dt>{t("products.columns.model")}</dt>
+              <dd>{product.model || "—"}</dd>
+            </div>
           </dl>
+
           <div className={styles.descBlock}>
             <span className={styles.descLabel}>{t("products.detail.description")}</span>
             <p className={styles.descText}>

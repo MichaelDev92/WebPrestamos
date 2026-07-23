@@ -36,6 +36,13 @@
   border-bottom: 1px solid var(--border-subtle);
 }
 
+/* Sin título/descripción: barra compacta solo para la X (sin borde), para no
+   desperdiciar el espacio superior. El contenido sube. */
+.headerBare {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: none;
+}
+
 .headerText {
   display: flex;
   flex-direction: column;

@@ -56,7 +56,7 @@ export function Modal({
         aria-labelledby={title ? "modal-title" : undefined}
         onClick={(event) => event.stopPropagation()}
       >
-        <header className={styles.header}>
+        <header className={clsx(styles.header, !title && !description && styles.headerBare)}>
           <div className={styles.headerText}>
             {title && (
               <h2 id="modal-title" className={styles.title}>
