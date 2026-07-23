@@ -1,0 +1,112 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.title {
+  font-size: var(--font-size-2xl);
+}
+
+.subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin-top: var(--space-1);
+}
+
+.tabs {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.tab {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.tab:hover {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+}
+
+.tabActive {
+  background: var(--accent-primary);
+  border-color: transparent;
+  color: var(--text-inverse);
+}
+
+.card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.center {
+  display: grid;
+  place-items: center;
+  padding: var(--space-8);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead th {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.row {
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.row:hover {
+  background: var(--bg-hover);
+}
+
+.row td {
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.titleCell {
+  font-weight: var(--font-weight-medium);
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+}
+
+.pending {
+  background: var(--status-warning-bg);
+  color: var(--accent-warning);
+}
+
+.approved {
+  background: var(--status-success-bg);
+  color: var(--accent-success);
+}
+
+.rejected {
+  background: var(--status-error-bg, rgba(244, 63, 94, 0.12));
+  color: var(--accent-error);
+}

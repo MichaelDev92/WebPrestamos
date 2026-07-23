@@ -1,37 +1,46 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Boxes, Pencil, Plus, Search, Trash2 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Boxes, Images, LayoutGrid, Pencil, Plus, Search, Table2, Trash2 } from "lucide-react";
 import { GlassCard } from "@/shared/components/ui/GlassCard/GlassCard";
 import { Button } from "@/shared/components/ui/Button/Button";
 import { Input } from "@/shared/components/ui/Input/Input";
-import { Select } from "@/shared/components/ui/Select/Select";
+import { Dropdown } from "@/shared/components/ui/Dropdown/Dropdown";
 import { IconButton } from "@/shared/components/ui/IconButton/IconButton";
 import { DataTable, type DataTableColumn } from "@/shared/components/ui/DataTable/DataTable";
 import { Pagination } from "@/shared/components/ui/Pagination/Pagination";
 import { EmptyState } from "@/shared/components/ui/EmptyState/EmptyState";
 import { ConfirmDialog } from "@/shared/components/ui/ConfirmDialog/ConfirmDialog";
+import { Skeleton } from "@/shared/components/ui/Skeleton/Skeleton";
+import { ViewSwitcher, type ViewOption } from "@/shared/components/ui/ViewSwitcher/ViewSwitcher";
 import { useT } from "@/shared/hooks/useT";
 import { useToast } from "@/shared/hooks/useToast";
+import { useSession } from "@/shared/hooks/useSession";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import { usePagination } from "@/shared/hooks/usePagination";
 import { formatCurrency, formatNumber } from "@/shared/lib/format/format";
 import { isApiError } from "@/shared/lib/http/errors";
+import { canModifyOwned } from "@/types/auth";
 import { useProductTypesQuery } from "@/features/product-types/hooks/useProductTypes";
 import {
   useDeleteProduct,
   useProductsQuery,
 } from "@/features/products/hooks/useProducts";
 import { ProductFormModal } from "@/features/products/components/ProductFormModal/ProductFormModal";
+import { ProductCard } from "@/features/products/components/ProductCard/ProductCard";
 import type { Product } from "@/features/products/types";
 import styles from "./ProductsPage.module.css";
+
+type ProductView = "table" | "cards" | "gallery";
 
 export function ProductsPage() {
   const { t } = useT();
   const toast = useToast();
+  const { user } = useSession();
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 350);
   const [typeFilter, setTypeFilter] = useState<string>("");
+  const [view, setView] = useState<ProductView>("table");
   const pagination = usePagination({ initialLimit: 10 });
 
   useEffect(() => {
@@ -50,11 +59,31 @@ export function ProductsPage() {
   const rows = listQuery.data?.data ?? [];
   const total = listQuery.data?.total ?? 0;
   const totalPages = listQuery.data?.totalPages ?? 0;
+  const isLoading = listQuery.isLoading || listQuery.isFetching;
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);
   const [deleting, setDeleting] = useState<Product | null>(null);
   const deleteMutation = useDeleteProduct();
+
+  const typeOptions = useMemo(
+    () => [
+      { value: "", label: t("products.allTypes") },
+      ...(typesQuery.data?.map((type) => ({ value: type.id, label: type.name })) ?? []),
+    ],
+    [typesQuery.data, t],
+  );
+
+  const viewOptions: ViewOption<ProductView>[] = [
+    { value: "table", label: t("products.views.table"), icon: <Table2 size={16} /> },
+    { value: "cards", label: t("products.views.cards"), icon: <LayoutGrid size={16} /> },
+    { value: "gallery", label: t("products.views.gallery"), icon: <Images size={16} /> },
+  ];
+
+  const openEdit = (item: Product) => {
+    setEditing(item);
+    setModalOpen(true);
+  };
 
   const columns: DataTableColumn<Product>[] = [
     {
@@ -93,28 +122,22 @@ export function ProductsPage() {
       header: t("products.columns.actions"),
       align: "right",
       width: "120px",
-      render: (item) => (
-        <div className={styles.actions}>
-          <IconButton
-            label={t("common.actions.edit")}
-            size="sm"
-            onClick={() => {
-              setEditing(item);
-              setModalOpen(true);
-            }}
-          >
-            <Pencil size={14} />
-          </IconButton>
-          <IconButton
-            label={t("common.actions.delete")}
-            size="sm"
-            variant="danger"
-            onClick={() => setDeleting(item)}
-          >
-            <Trash2 size={14} />
-          </IconButton>
-        </div>
-      ),
+      render: (item) =>
+        canModifyOwned(user, item.createdBy) ? (
+          <div className={styles.actions}>
+            <IconButton label={t("common.actions.edit")} size="sm" onClick={() => openEdit(item)}>
+              <Pencil size={14} />
+            </IconButton>
+            <IconButton
+              label={t("common.actions.delete")}
+              size="sm"
+              variant="danger"
+              onClick={() => setDeleting(item)}
+            >
+              <Trash2 size={14} />
+            </IconButton>
+          </div>
+        ) : null,
     },
   ];
 
@@ -126,13 +149,59 @@ export function ProductsPage() {
         setDeleting(null);
       },
       onError: (error) => {
-        if (isApiError(error)) {
-          toast.error(error.message || t("errors.unknown"));
-        } else {
-          toast.error(t("errors.unknown"));
-        }
+        toast.error(isApiError(error) ? error.message || t("errors.unknown") : t("errors.unknown"));
       },
     });
+  };
+
+  const cardLabels = {
+    edit: t("common.actions.edit"),
+    delete: t("common.actions.delete"),
+    stock: t("products.columns.stock"),
+    noImage: t("products.card.noImage"),
+  };
+
+  const renderCards = (variant: "small" | "large") => {
+    const gridClass = variant === "large" ? styles.galleryGrid : styles.cardsGrid;
+    if (isLoading) {
+      return (
+        <div className={styles.gridWrap}>
+          <div className={gridClass}>
+            {Array.from({ length: 8 }).map((_, index) => (
+              <Skeleton key={index} height={variant === "large" ? 260 : 96} radius="16px" />
+            ))}
+          </div>
+        </div>
+      );
+    }
+    if (rows.length === 0) {
+      return (
+        <div className={styles.emptyWrap}>
+          <EmptyState
+            icon={<Boxes size={36} />}
+            title={t("common.states.noData")}
+            description={t("products.subtitle")}
+          />
+        </div>
+      );
+    }
+    return (
+      <div className={styles.gridWrap}>
+        <div className={gridClass}>
+          {rows.map((item) => (
+            <ProductCard
+              key={item.id}
+              product={item}
+              variant={variant}
+              onEdit={openEdit}
+              onDelete={setDeleting}
+              canModify={canModifyOwned(user, item.createdBy)}
+              labels={cardLabels}
+            />
+          ))}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -166,35 +235,35 @@ export function ProductsPage() {
             />
           </div>
           <div className={styles.filterWrap}>
-            <Select
+            <Dropdown
               value={typeFilter}
-              onChange={(event) => setTypeFilter(event.target.value)}
+              onChange={setTypeFilter}
+              options={typeOptions}
               disabled={typesQuery.isLoading}
-              aria-label={t("products.filterByType")}
-            >
-              <option value="">{t("products.allTypes")}</option>
-              {typesQuery.data?.map((type) => (
-                <option key={type.id} value={type.id}>
-                  {type.name}
-                </option>
-              ))}
-            </Select>
+              searchable
+            />
           </div>
+          <div className={styles.spacer} />
+          <ViewSwitcher value={view} onChange={setView} options={viewOptions} />
         </div>
 
-        <DataTable
-          columns={columns}
-          rows={rows}
-          rowKey={(item) => item.id}
-          loading={listQuery.isLoading || listQuery.isFetching}
-          emptyState={
-            <EmptyState
-              icon={<Boxes size={36} />}
-              title={t("common.states.noData")}
-              description={t("products.subtitle")}
-            />
-          }
-        />
+        {view === "table" ? (
+          <DataTable
+            columns={columns}
+            rows={rows}
+            rowKey={(item) => item.id}
+            loading={isLoading}
+            emptyState={
+              <EmptyState
+                icon={<Boxes size={36} />}
+                title={t("common.states.noData")}
+                description={t("products.subtitle")}
+              />
+            }
+          />
+        ) : (
+          renderCards(view === "gallery" ? "large" : "small")
+        )}
 
         {total > 0 && (
           <Pagination
@@ -208,20 +277,12 @@ export function ProductsPage() {
         )}
       </GlassCard>
 
-      <ProductFormModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        product={editing}
-      />
+      <ProductFormModal open={modalOpen} onClose={() => setModalOpen(false)} product={editing} />
 
       <ConfirmDialog
         open={Boolean(deleting)}
         title={t("products.delete.title")}
-        message={
-          deleting
-            ? t("products.delete.message", { name: deleting.name })
-            : ""
-        }
+        message={deleting ? t("products.delete.message", { name: deleting.name }) : ""}
         confirmLabel={t("common.actions.delete")}
         cancelLabel={t("common.actions.cancel")}
         loading={deleteMutation.isPending}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Layers3, Pencil, Plus, Search, Trash2 } from "lucide-react";
+import { Layers3, Pencil, Plus, Search, SendHorizontal, Trash2 } from "lucide-react";
 import { GlassCard } from "@/shared/components/ui/GlassCard/GlassCard";
 import { Button } from "@/shared/components/ui/Button/Button";
 import { Input } from "@/shared/components/ui/Input/Input";
@@ -12,26 +12,32 @@ import { EmptyState } from "@/shared/components/ui/EmptyState/EmptyState";
 import { ConfirmDialog } from "@/shared/components/ui/ConfirmDialog/ConfirmDialog";
 import { useT } from "@/shared/hooks/useT";
 import { useToast } from "@/shared/hooks/useToast";
+import { useSession } from "@/shared/hooks/useSession";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import { usePagination } from "@/shared/hooks/usePagination";
 import { isApiError } from "@/shared/lib/http/errors";
+import { DASHBOARD_ALLOWED_ROLES } from "@/types/auth";
 import {
   useDeleteProductType,
   useProductTypesQuery,
 } from "@/features/product-types/hooks/useProductTypes";
 import type { ProductType } from "@/features/product-types/types";
 import { ProductTypeFormModal } from "@/features/product-types/components/ProductTypeFormModal/ProductTypeFormModal";
+import { RequestProductTypeModal } from "@/features/requests/components/RequestProductTypeModal/RequestProductTypeModal";
 import styles from "./ProductTypesPage.module.css";
 
 export function ProductTypesPage() {
   const { t } = useT();
   const toast = useToast();
+  const { hasAnyRole } = useSession();
+  const canManage = hasAnyRole(DASHBOARD_ALLOWED_ROLES);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 300);
   const pagination = usePagination({ initialLimit: 10 });
   const { data, isLoading } = useProductTypesQuery();
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [requestOpen, setRequestOpen] = useState(false);
   const [editing, setEditing] = useState<ProductType | null>(null);
   const [deleting, setDeleting] = useState<ProductType | null>(null);
   const deleteMutation = useDeleteProductType();
@@ -67,7 +73,10 @@ export function ProductTypesPage() {
       render: (item) =>
         item.notes ? <span className={styles.notes}>{item.notes}</span> : null,
     },
-    {
+  ];
+
+  if (canManage) {
+    columns.push({
       key: "actions",
       header: t("productTypes.columns.actions"),
       align: "right",
@@ -94,8 +103,8 @@ export function ProductTypesPage() {
           </IconButton>
         </div>
       ),
-    },
-  ];
+    });
+  }
 
   const handleConfirmDelete = () => {
     if (!deleting) return;
@@ -123,15 +132,25 @@ export function ProductTypesPage() {
           <h1 className={styles.title}>{t("productTypes.title")}</h1>
           <p className={styles.subtitle}>{t("productTypes.subtitle")}</p>
         </div>
-        <Button
-          iconLeft={<Plus size={16} />}
-          onClick={() => {
-            setEditing(null);
-            setModalOpen(true);
-          }}
-        >
-          {t("productTypes.createButton")}
-        </Button>
+        {canManage ? (
+          <Button
+            iconLeft={<Plus size={16} />}
+            onClick={() => {
+              setEditing(null);
+              setModalOpen(true);
+            }}
+          >
+            {t("productTypes.createButton")}
+          </Button>
+        ) : (
+          <Button
+            variant="secondary"
+            iconLeft={<SendHorizontal size={16} />}
+            onClick={() => setRequestOpen(true)}
+          >
+            {t("requests.actions.requestType")}
+          </Button>
+        )}
       </header>
 
       <GlassCard className={styles.card} compact>
@@ -181,6 +200,8 @@ export function ProductTypesPage() {
         onClose={() => setModalOpen(false)}
         productType={editing}
       />
+
+      <RequestProductTypeModal open={requestOpen} onClose={() => setRequestOpen(false)} />
 
       <ConfirmDialog
         open={Boolean(deleting)}

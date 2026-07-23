@@ -1,14 +1,10 @@
 import type { Metadata } from "next";
+import { ProductsPage } from "@/features/products/components/ProductsPage/ProductsPage";
 
 export const metadata: Metadata = {
   title: "Productos",
 };
 
-export default function ProductsPage() {
-  return (
-    <div>
-      <h1>Productos</h1>
-      <p>En construcción.</p>
-    </div>
-  );
+export default function Page() {
+  return <ProductsPage />;
 }

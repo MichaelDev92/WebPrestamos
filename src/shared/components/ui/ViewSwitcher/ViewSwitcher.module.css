@@ -1,0 +1,29 @@
+.group {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.item {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.item:hover {
+  color: var(--text-secondary);
+  background: var(--bg-hover);
+}
+
+.item.active {
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+}

@@ -89,3 +89,20 @@ img, svg {
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
+
+/* ============================================
+   React Query Devtools — alinear con el dev indicator de Next.js
+   El botón nativo de RQ es 40x40 + 4px de padding (≈48px) y se ancla en
+   bottom/left: 12px, que coincide con el indicador de Next.js. Lo reducimos
+   al mismo tamaño (~28px) y lo subimos para que no se superpongan.
+   ============================================ */
+.tsqd-open-btn-container {
+  bottom: 58px !important;
+  left: 20px !important;
+  padding: 2px !important;
+}
+
+.tsqd-open-btn-container .tsqd-open-btn {
+  width: 28px !important;
+  height: 28px !important;
+}

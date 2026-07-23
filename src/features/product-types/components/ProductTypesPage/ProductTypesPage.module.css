@@ -49,8 +49,8 @@
   color: var(--text-muted);
 }
 
-.searchInput {
-  padding-left: calc(var(--space-3) + 20px);
+.searchWrap .searchInput {
+  padding-left: calc(var(--space-3) + 24px);
 }
 
 .codeCell {

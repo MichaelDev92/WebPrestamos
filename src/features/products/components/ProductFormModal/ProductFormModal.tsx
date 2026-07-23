@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useController, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Modal } from "@/shared/components/ui/Modal/Modal";
 import { FormField, FormRow } from "@/shared/components/ui/FormField/FormField";
 import { Input } from "@/shared/components/ui/Input/Input";
-import { Select } from "@/shared/components/ui/Select/Select";
+import { Dropdown } from "@/shared/components/ui/Dropdown/Dropdown";
 import { Textarea } from "@/shared/components/ui/Textarea/Textarea";
 import { Button } from "@/shared/components/ui/Button/Button";
 import { useT } from "@/shared/hooks/useT";
@@ -60,6 +60,8 @@ export function ProductFormModal({ open, onClose, product }: ProductFormModalPro
     resolver: zodResolver(productSchema),
     defaultValues: EMPTY_VALUES,
   });
+
+  const productType = useController({ control, name: "productType" });
 
   useEffect(() => {
     if (!open) return;
@@ -182,18 +184,20 @@ export function ProductFormModal({ open, onClose, product }: ProductFormModalPro
           error={translate(errors.productType?.message)}
           required
         >
-          <Select
+          <Dropdown
+            value={productType.field.value}
+            onChange={productType.field.onChange}
+            options={
+              typesQuery.data?.map((type) => ({
+                value: type.id,
+                label: `${type.name} (${type.code})`,
+              })) ?? []
+            }
+            placeholder="—"
+            searchable
             disabled={isPending || typesQuery.isLoading}
             invalid={Boolean(errors.productType)}
-            {...register("productType")}
-          >
-            <option value="">—</option>
-            {typesQuery.data?.map((type) => (
-              <option key={type.id} value={type.id}>
-                {type.name} ({type.code})
-              </option>
-            ))}
-          </Select>
+          />
         </FormField>
 
         <FormRow columns={2}>

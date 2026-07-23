@@ -7,20 +7,27 @@ import { QueryProvider } from "@/shared/components/query/QueryProvider";
 import { ToastProvider } from "@/shared/components/toast/ToastProvider";
 import type { Dictionary } from "@/shared/lib/i18n/getDictionary";
 import type { Locale } from "@/shared/lib/i18n/i18n.constants";
+import { DEFAULT_THEME, type Theme } from "@/shared/lib/theme/theme.constants";
 
 interface AppProvidersProps {
   children: ReactNode;
   locale: Locale;
   dictionary: Dictionary;
+  initialTheme?: Theme;
 }
 
 /**
  * Providers globales (cliente) usados por (auth) y (dashboard).
- * ThemeProvider está bloqueado a "dark" hasta que se active el toggle.
+ * El tema inicial viene de la cookie (SSR); el toggle light/dark ya está activo.
  */
-export function AppProviders({ children, locale, dictionary }: AppProvidersProps) {
+export function AppProviders({
+  children,
+  locale,
+  dictionary,
+  initialTheme = DEFAULT_THEME,
+}: AppProvidersProps) {
   return (
-    <ThemeProvider forceTheme="dark">
+    <ThemeProvider initialTheme={initialTheme}>
       <I18nProvider locale={locale} dictionary={dictionary}>
         <QueryProvider>
           <ToastProvider>{children}</ToastProvider>

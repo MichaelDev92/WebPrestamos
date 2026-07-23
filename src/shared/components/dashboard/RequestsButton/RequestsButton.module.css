@@ -1,0 +1,115 @@
+.trigger {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.trigger:hover,
+.trigger.open {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+}
+
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  border: 2px solid var(--bg-secondary);
+}
+
+.panel {
+  width: 340px;
+  max-width: calc(100vw - 2 * var(--space-4));
+}
+
+.header {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.headerTitle {
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.list {
+  max-height: 380px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-2);
+}
+
+.item {
+  width: 100%;
+  display: flex;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.item:hover {
+  background: var(--bg-hover);
+}
+
+.itemBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.itemType {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-accent);
+  font-weight: var(--font-weight-semibold);
+}
+
+.itemTitle {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+.itemMeta {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+.empty {
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.footer {
+  padding: var(--space-3);
+  text-align: center;
+  border-top: 1px solid var(--border-subtle);
+  font-size: var(--font-size-xs);
+  color: var(--text-accent);
+}

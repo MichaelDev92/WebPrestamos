@@ -47,6 +47,7 @@
       "password": "Contraseña",
       "submit": "Ingresar",
       "submitting": "Ingresando...",
+      "remember": "Recuérdame",
       "invalidCredentials": "Credenciales inválidas",
       "unauthorized": "No tienes permisos para acceder al dashboard"
     },
@@ -80,7 +81,8 @@
     "productTypes": "Tipos de producto",
     "registerUser": "Registrar usuario",
     "clients": "Clientes",
-    "users": "Usuarios"
+    "users": "Usuarios",
+    "requests": "Solicitudes"
   },
   "overview": {
     "title": "Resumen general",
@@ -102,6 +104,14 @@
     "search": "Buscar por nombre o código",
     "filterByType": "Filtrar por tipo",
     "allTypes": "Todos los tipos",
+    "views": {
+      "table": "Tabla",
+      "cards": "Tarjetas",
+      "gallery": "Galería"
+    },
+    "card": {
+      "noImage": "Sin imagen"
+    },
     "columns": {
       "code": "Código",
       "name": "Nombre",
@@ -179,6 +189,214 @@
     "update": {
       "success": "Tipo de producto actualizado",
       "conflict": "No se puede desactivar: hay productos activos asociados a este tipo"
+    }
+  },
+  "clients": {
+    "title": "Clientes",
+    "subtitle": "Administra la información de tus clientes",
+    "createButton": "Nuevo cliente",
+    "search": "Buscar por nombre, documento o correo",
+    "columns": {
+      "fullName": "Nombre",
+      "document": "Documento",
+      "email": "Correo",
+      "phone": "Teléfono",
+      "actions": "Acciones"
+    },
+    "form": {
+      "createTitle": "Crear cliente",
+      "editTitle": "Editar cliente",
+      "selectPlaceholder": "Seleccione",
+      "fields": {
+        "names": "Nombres",
+        "surnames": "Apellidos",
+        "email": "Correo electrónico",
+        "phoneNumber": "Teléfono",
+        "address": "Dirección",
+        "birthdate": "Fecha de nacimiento",
+        "typeDocument": "Tipo de documento",
+        "documentNumber": "Número de documento",
+        "employmentStatus": "Estado laboral",
+        "employerName": "Empresa / empleador",
+        "monthlyIncome": "Ingreso mensual",
+        "creditScore": "Puntaje crediticio",
+        "riskCategory": "Categoría de riesgo",
+        "notes": "Notas"
+      }
+    },
+    "delete": {
+      "title": "Eliminar cliente",
+      "message": "¿Seguro que quieres eliminar a \"{name}\"? Esta acción lo desactiva.",
+      "success": "Cliente eliminado"
+    },
+    "create": {
+      "success": "Cliente creado correctamente",
+      "duplicateEmail": "Ya existe un cliente con este correo",
+      "duplicateDocument": "Ya existe un cliente con este documento"
+    },
+    "update": {
+      "success": "Cliente actualizado correctamente"
+    }
+  },
+  "users": {
+    "title": "Usuarios",
+    "subtitle": "Gestiona las cuentas y roles del sistema",
+    "createButton": "Nuevo usuario",
+    "search": "Buscar por nombre",
+    "columns": {
+      "fullName": "Nombre",
+      "email": "Correo",
+      "phone": "Teléfono",
+      "role": "Rol",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "actions": {
+      "reactivate": "Reactivar"
+    },
+    "reactivate": {
+      "success": "Usuario reactivado",
+      "alreadyActive": "El usuario ya está activo",
+      "notFound": "Usuario no encontrado"
+    },
+    "form": {
+      "createTitle": "Crear usuario",
+      "editTitle": "Editar usuario",
+      "passwordEditHint": "Déjalo en blanco para no cambiarla",
+      "fields": {
+        "names": "Nombres",
+        "surnames": "Apellidos",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "role": "Rol",
+        "phoneNumber": "Teléfono",
+        "address": "Dirección",
+        "birthdate": "Fecha de nacimiento"
+      }
+    },
+    "delete": {
+      "title": "Eliminar usuario",
+      "message": "¿Seguro que quieres eliminar a \"{name}\"? Esta acción lo desactiva.",
+      "success": "Usuario eliminado"
+    },
+    "create": {
+      "success": "Usuario creado correctamente",
+      "duplicateEmail": "Ya existe un usuario con este correo"
+    },
+    "update": {
+      "success": "Usuario actualizado correctamente"
+    }
+  },
+  "notifications": {
+    "label": "Notificaciones",
+    "title": "Notificaciones",
+    "markAllRead": "Marcar todas como leídas",
+    "empty": "No tienes notificaciones",
+    "viewAll": "Ver todas"
+  },
+  "messages": {
+    "label": "Mensajes",
+    "title": "Mensajes",
+    "subtitle": "Bandeja de mensajes recibidos",
+    "conversations": "Conversaciones",
+    "newConversation": "Nueva conversación",
+    "searchConversations": "Buscar conversación",
+    "searchContacts": "Buscar contacto",
+    "noConversations": "Aún no tienes conversaciones",
+    "emptyConversation": "Selecciona una conversación para ver los mensajes",
+    "connected": "Conectado",
+    "disconnected": "Sin conexión",
+    "inputPlaceholder": "Escribe un mensaje...",
+    "newMessageTitle": "Nuevo mensaje",
+    "newMessageToast": "Recibiste un nuevo mensaje",
+    "openConversation": "Abrir conversación",
+    "sent": "Enviado",
+    "read": "Leído"
+  },
+  "requests": {
+    "title": "Solicitudes",
+    "subtitle": "Solicitudes de aprobación del sistema",
+    "inbox": "Bandeja de solicitudes",
+    "empty": "No hay solicitudes",
+    "emptyPending": "No hay solicitudes pendientes",
+    "viewAll": "Ver todas",
+    "pending": "Pendiente",
+    "approved": "Aprobada",
+    "rejected": "Rechazada",
+    "backToList": "Volver a solicitudes",
+    "loadError": "No se pudo cargar la solicitud",
+    "resolvedElsewhere": "Esta solicitud ya fue resuelta por otro usuario",
+    "columns": {
+      "type": "Naturaleza",
+      "title": "Título",
+      "requestedBy": "Solicitó",
+      "status": "Estado",
+      "createdAt": "Fecha"
+    },
+    "filters": {
+      "all": "Todas",
+      "pending": "Pendientes",
+      "approved": "Aprobadas",
+      "rejected": "Rechazadas"
+    },
+    "types": {
+      "PRODUCT_TYPE_CREATE": "Solicitud nuevo tipo producto"
+    },
+    "detail": {
+      "title": "Detalle de solicitud",
+      "nature": "Naturaleza",
+      "requestTitle": "Título",
+      "description": "Descripción",
+      "requestedBy": "Solicitado por",
+      "resolvedBy": "Resuelto por",
+      "createdAt": "Fecha de solicitud",
+      "resolvedAt": "Fecha de resolución",
+      "responseTime": "Tiempo de respuesta",
+      "resolutionNote": "Observación",
+      "status": "Estado",
+      "result": "Resultado",
+      "pendingHint": "Esta solicitud está pendiente de revisión.",
+      "noNote": "Sin observación"
+    },
+    "actions": {
+      "approve": "Aprobar",
+      "reject": "Rechazar",
+      "requestType": "Solicitar nuevo tipo",
+      "submit": "Enviar solicitud"
+    },
+    "approve": {
+      "title": "Aprobar y crear tipo de producto",
+      "code": "Código",
+      "codeHint": "Código único del tipo (solo letras y números)",
+      "name": "Nombre",
+      "notes": "Notas",
+      "note": "Observación (opcional)",
+      "confirm": "Aprobar y crear",
+      "success": "Solicitud aprobada y tipo creado",
+      "conflict": "Ya existe un tipo con ese nombre o código"
+    },
+    "reject": {
+      "title": "Rechazar solicitud",
+      "note": "Observación / motivo",
+      "notePlaceholder": "Ej: el tipo ya está listado en una categoría existente",
+      "confirm": "Rechazar",
+      "success": "Solicitud rechazada"
+    },
+    "form": {
+      "title": "Solicitar nuevo tipo de producto",
+      "name": "Nombre del tipo",
+      "description": "Descripción",
+      "hint": "Un administrador revisará tu solicitud.",
+      "success": "Solicitud enviada"
+    },
+    "toast": {
+      "new": "Nueva solicitud recibida",
+      "approved": "Tu solicitud fue aprobada",
+      "rejected": "Tu solicitud fue rechazada"
     }
   },
   "errors": {

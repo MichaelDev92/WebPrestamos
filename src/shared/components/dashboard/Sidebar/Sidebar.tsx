@@ -7,16 +7,16 @@ import {
   BarChart3,
   Boxes,
   ChevronRight,
+  ClipboardList,
   Layers3,
   Lock,
-  UserPlus,
+  ShieldCheck,
   Users,
-  Wallet,
 } from "lucide-react";
 import type { ComponentType } from "react";
 import { useT } from "@/shared/hooks/useT";
 import { useSession } from "@/shared/hooks/useSession";
-import { REGISTER_ALLOWED_ROLES } from "@/types/auth";
+import { DASHBOARD_ALLOWED_ROLES, REGISTER_ALLOWED_ROLES } from "@/types/auth";
 import type { TranslationKey } from "@/shared/lib/i18n/translate";
 import styles from "./Sidebar.module.css";
 
@@ -25,6 +25,7 @@ interface NavItem {
   label: TranslationKey;
   icon: ComponentType<{ size?: number }>;
   superadminOnly?: boolean;
+  resolverOnly?: boolean;
 }
 
 interface UpcomingItem {
@@ -34,15 +35,17 @@ interface UpcomingItem {
 
 const NAV_ITEMS: NavItem[] = [
   { href: "/overview", label: "nav.overview", icon: BarChart3 },
+  { href: "/clients", label: "nav.clients", icon: Users },
   { href: "/products", label: "nav.products", icon: Boxes },
   { href: "/product-types", label: "nav.productTypes", icon: Layers3 },
-  { href: "/register", label: "nav.registerUser", icon: UserPlus, superadminOnly: true },
+  { href: "/solicitudes", label: "nav.requests", icon: ClipboardList, resolverOnly: true },
+  { href: "/users", label: "nav.users", icon: ShieldCheck, superadminOnly: true },
 ];
 
-const UPCOMING_ITEMS: UpcomingItem[] = [
-  { label: "nav.clients", icon: Users },
-  { label: "nav.users", icon: Wallet },
-];
+const UPCOMING_ITEMS: UpcomingItem[] = [];
+
+/** Versión de la app (inyectada desde package.json en next.config). */
+const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION;
 
 interface SidebarProps {
   onNavigate?: () => void;
@@ -53,6 +56,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   const { t } = useT();
   const { hasAnyRole } = useSession();
   const canRegister = hasAnyRole(REGISTER_ALLOWED_ROLES);
+  const canResolve = hasAnyRole(DASHBOARD_ALLOWED_ROLES);
 
   return (
     <nav className={styles.nav} aria-label="Navegación principal">
@@ -62,7 +66,10 @@ export function Sidebar({ onNavigate }: SidebarProps) {
       </Link>
 
       <ul className={styles.section}>
-        {NAV_ITEMS.filter((item) => !item.superadminOnly || canRegister).map((item) => {
+        {NAV_ITEMS.filter(
+          (item) =>
+            (!item.superadminOnly || canRegister) && (!item.resolverOnly || canResolve),
+        ).map((item) => {
           const Icon = item.icon;
           const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
@@ -81,6 +88,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
         })}
       </ul>
 
+      {UPCOMING_ITEMS.length > 0 && (
       <div className={styles.upcomingBlock}>
         <p className={styles.upcomingLabel}>{t("theme.comingSoon")}</p>
         <ul className={styles.section}>
@@ -98,6 +106,13 @@ export function Sidebar({ onNavigate }: SidebarProps) {
           })}
         </ul>
       </div>
+      )}
+
+      {APP_VERSION && (
+        <footer className={styles.footer}>
+          <span>v{APP_VERSION}</span>
+        </footer>
+      )}
     </nav>
   );
 }

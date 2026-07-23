@@ -56,12 +56,13 @@ export function ThemeProvider({
 
   const toggleTheme = useCallback(() => {
     if (forceTheme) return;
-    setThemeState((current) => {
-      const next: Theme = current === "dark" ? "light" : "dark";
-      void setThemeCookie(next);
-      return next;
-    });
-  }, [forceTheme]);
+    // El efecto (Server Action) va FUERA del updater de estado: llamarlo dentro
+    // del updater lo ejecuta durante el render y actualiza el Router en render
+    // → "Cannot update a component (Router) while rendering ThemeProvider".
+    const next: Theme = theme === "dark" ? "light" : "dark";
+    setThemeState(next);
+    void setThemeCookie(next);
+  }, [forceTheme, theme]);
 
   const value = useMemo<ThemeContextValue>(
     () => ({

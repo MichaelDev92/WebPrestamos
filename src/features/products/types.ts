@@ -13,6 +13,8 @@ export interface Product {
   model?: string | null;
   description?: string | null;
   imageUrls?: string[] | null;
+  createdBy?: string | null;
+  shared?: boolean;
 }
 
 export interface PaginatedResponse<T> {

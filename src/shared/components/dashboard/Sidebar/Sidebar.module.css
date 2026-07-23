@@ -100,3 +100,14 @@
   padding: 0 var(--space-3);
   margin-bottom: var(--space-2);
 }
+
+/* Versión de la app, anclada al fondo del sidebar. Color por token → legible en
+   ambos temas (light/dark). */
+.footer {
+  margin-top: auto;
+  padding: var(--space-3);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-subtle);
+}

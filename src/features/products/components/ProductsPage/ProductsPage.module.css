@@ -51,12 +51,36 @@
   color: var(--text-muted);
 }
 
-.searchInput {
-  padding-left: calc(var(--space-3) + 20px);
+.searchWrap .searchInput {
+  padding-left: calc(var(--space-3) + 24px);
 }
 
 .filterWrap {
   min-width: 200px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.gridWrap {
+  padding: var(--space-4);
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-3);
+}
+
+.galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+
+.emptyWrap {
+  padding: var(--space-8) var(--space-4);
 }
 
 .codeCell {

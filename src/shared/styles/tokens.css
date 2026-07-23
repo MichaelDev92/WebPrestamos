@@ -6,6 +6,8 @@
 
 :root,
 [data-theme="dark"] {
+  color-scheme: dark;
+
   /* Backgrounds — Design 1 */
   --bg-primary: #02040a;
   --bg-secondary: #0a0e1a;
@@ -68,19 +70,26 @@
    LIGHT MODE — preparado, activable cuando se quiera
    ============================================ */
 [data-theme="light"] {
-  --bg-primary: #f8fafc;
-  --bg-secondary: #f1f5f9;
-  --bg-tertiary: #e2e8f0;
-  --bg-card: #ffffff;
-  --bg-hover: #f8fafc;
-  --bg-active: #f1f5f9;
+  color-scheme: light;
 
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(14, 165, 233, 0.15);
-  --glass-border-hover: rgba(14, 165, 233, 0.3);
-  --glass-shadow: 0 4px 24px rgba(0, 40, 100, 0.08);
-  --glass-shadow-hover: 0 4px 24px rgba(14, 165, 233, 0.18);
-  --glass-blur: 24px;
+  /* En claro la jerarquía la da el CONTRASTE, no la luminancia: fondos en gris
+     REAL (no blanco roto) para que las cards blancas se lean como superficies. */
+  --bg-primary: #e9edf4;   /* fondo de página (gris base) */
+  --bg-secondary: #dfe5ee; /* navbar / sidebar */
+  --bg-tertiary: #d3dae6;  /* inputs, chips, botones-ícono */
+  --bg-card: #ffffff;      /* cards (superficie elevada) */
+  --bg-hover: #dbe5f3;     /* hover: tinte notable sobre filas/cards blancas */
+  --bg-active: #cbddf6;    /* seleccionado (tinte del acento, > hover) */
+
+  /* Glass: superficie casi opaca + blur mínimo (en claro el blur solo lava). */
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(15, 23, 42, 0.12);
+  --glass-border-hover: rgba(2, 132, 199, 0.4);
+  /* Sombra en dos capas: 1px de canto que dibuja el borde + difusa de elevación.
+     Una sola difusa al 8% es invisible sobre fondo claro. */
+  --glass-shadow: 0 1px 2px rgba(15, 23, 42, 0.08), 0 8px 24px rgba(15, 23, 42, 0.08);
+  --glass-shadow-hover: 0 1px 2px rgba(15, 23, 42, 0.1), 0 8px 28px rgba(2, 132, 199, 0.18);
+  --glass-blur: 8px;
 
   --accent-primary: #0284c7;
   --accent-primary-light: #0ea5e9;
@@ -89,32 +98,34 @@
   --accent-secondary-light: #06b6d4;
   --accent-success: #059669;
   --accent-error: #dc2626;
-  --accent-warning: #d97706;
+  --accent-warning: #b45309;
   --accent-info: #7c3aed;
 
-  --glow-primary: 0 0 16px rgba(14, 165, 233, 0.18);
-  --glow-secondary: 0 0 16px rgba(6, 182, 212, 0.18);
-  --glow-success: 0 0 14px rgba(5, 150, 105, 0.18);
-  --glow-error: 0 0 14px rgba(220, 38, 38, 0.2);
+  --glow-primary: 0 0 16px rgba(2, 132, 199, 0.12);
+  --glow-secondary: 0 0 16px rgba(6, 182, 212, 0.12);
+  --glow-success: 0 0 14px rgba(5, 150, 105, 0.14);
+  --glow-error: 0 0 14px rgba(220, 38, 38, 0.16);
 
   --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-accent: #0ea5e9;
-  --text-muted: #94a3b8;
-  --text-disabled: #cbd5e1;
-  --text-inverse: #f8fafc;
+  --text-secondary: #475569;
+  --text-accent: #0369a1;
+  --text-muted: #64748b;
+  --text-disabled: #94a3b8;
+  --text-inverse: #ffffff;
 
-  --border-subtle: rgba(14, 165, 233, 0.18);
-  --border-hover: rgba(14, 165, 233, 0.35);
-  --border-strong: rgba(14, 165, 233, 0.5);
+  /* Bordes con tinte slate oscuro y opacidad real → visibles sobre claro
+     (el sky-blue anterior a 0.18 desaparecía sobre blanco). */
+  --border-subtle: rgba(15, 23, 42, 0.12);
+  --border-hover: rgba(15, 23, 42, 0.22);
+  --border-strong: rgba(15, 23, 42, 0.34);
 
   --status-success-bg: rgba(5, 150, 105, 0.1);
   --status-error-bg: rgba(220, 38, 38, 0.1);
-  --status-warning-bg: rgba(217, 119, 6, 0.1);
+  --status-warning-bg: rgba(180, 83, 9, 0.1);
   --status-info-bg: rgba(124, 58, 237, 0.1);
 
   --scrollbar-track: var(--bg-secondary);
-  --scrollbar-thumb: #cbd5e1;
+  --scrollbar-thumb: #b8c2d0;
   --scrollbar-thumb-hover: var(--accent-primary);
 }
 
@@ -122,6 +133,9 @@
    ESCALAS — espaciado, radii, tipografía, z-index
    ============================================ */
 :root {
+  /* Texto sobre superficies de acento (azul oscuro en ambos temas) → siempre claro. */
+  --text-on-accent: #f8fafc;
+
   /* Spacing scale */
   --space-1: 0.25rem;
   --space-2: 0.5rem;

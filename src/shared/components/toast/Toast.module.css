@@ -17,10 +17,11 @@
   align-items: flex-start;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--glass-border);
+  /* Fondo opaco (no `--glass-bg`, que en dark es translúcido y deja ver el
+     contenido de atrás chocando con el texto). Mismo criterio que la viñeta de
+     mensaje nuevo del navbar. */
+  background: var(--bg-card);
+  border: 1px solid var(--border-hover);
   border-radius: var(--radius-md);
   box-shadow: var(--glass-shadow);
   color: var(--text-primary);

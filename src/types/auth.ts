@@ -49,3 +49,10 @@ export interface RegisterRequest {
 export function hasRole(user: SessionUser | null, allowed: Role[]): boolean {
   return Boolean(user && allowed.includes(user.role));
 }
+
+/** Un recurso lo puede editar/eliminar su creador o un superadmin. */
+export function canModifyOwned(user: SessionUser | null, createdBy?: string | null): boolean {
+  if (!user) return false;
+  if (user.role === "superadmin") return true;
+  return createdBy != null && createdBy === user.id;
+}
