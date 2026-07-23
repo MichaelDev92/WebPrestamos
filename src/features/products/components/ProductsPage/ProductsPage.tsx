@@ -27,6 +27,7 @@ import {
   useProductsQuery,
 } from "@/features/products/hooks/useProducts";
 import { ProductFormModal } from "@/features/products/components/ProductFormModal/ProductFormModal";
+import { ProductDetailModal } from "@/features/products/components/ProductDetailModal/ProductDetailModal";
 import { ProductCard } from "@/features/products/components/ProductCard/ProductCard";
 import type { Product } from "@/features/products/types";
 import styles from "./ProductsPage.module.css";
@@ -66,6 +67,7 @@ export function ProductsPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);
   const [deleting, setDeleting] = useState<Product | null>(null);
+  const [detailing, setDetailing] = useState<Product | null>(null);
   const deleteMutation = useDeleteProduct();
 
   const typeOptions = useMemo(
@@ -123,23 +125,29 @@ export function ProductsPage() {
       key: "actions",
       header: t("products.columns.actions"),
       align: "right",
-      width: "120px",
-      render: (item) =>
-        canModifyOwned(user, item.createdBy) ? (
-          <div className={styles.actions}>
-            <IconButton label={t("common.actions.edit")} size="sm" onClick={() => openEdit(item)}>
-              <Pencil size={14} />
-            </IconButton>
-            <IconButton
-              label={t("common.actions.delete")}
-              size="sm"
-              variant="danger"
-              onClick={() => setDeleting(item)}
-            >
-              <Trash2 size={14} />
-            </IconButton>
-          </div>
-        ) : null,
+      width: "150px",
+      render: (item) => (
+        <div className={styles.actions}>
+          <IconButton label={t("products.card.details")} size="sm" onClick={() => setDetailing(item)}>
+            <Search size={14} />
+          </IconButton>
+          {canModifyOwned(user, item.createdBy) && (
+            <>
+              <IconButton label={t("common.actions.edit")} size="sm" onClick={() => openEdit(item)}>
+                <Pencil size={14} />
+              </IconButton>
+              <IconButton
+                label={t("common.actions.delete")}
+                size="sm"
+                variant="danger"
+                onClick={() => setDeleting(item)}
+              >
+                <Trash2 size={14} />
+              </IconButton>
+            </>
+          )}
+        </div>
+      ),
     },
   ];
 
@@ -159,6 +167,7 @@ export function ProductsPage() {
   const cardLabels = {
     edit: t("common.actions.edit"),
     delete: t("common.actions.delete"),
+    details: t("products.card.details"),
     stock: t("products.columns.stock"),
     noImage: t("products.card.noImage"),
   };
@@ -197,6 +206,7 @@ export function ProductsPage() {
               variant={variant}
               onEdit={openEdit}
               onDelete={setDeleting}
+              onDetails={setDetailing}
               canModify={canModifyOwned(user, item.createdBy)}
               labels={cardLabels}
             />
@@ -280,6 +290,12 @@ export function ProductsPage() {
       </GlassCard>
 
       <ProductFormModal open={modalOpen} onClose={() => setModalOpen(false)} product={editing} />
+
+      <ProductDetailModal
+        product={detailing}
+        open={Boolean(detailing)}
+        onClose={() => setDetailing(null)}
+      />
 
       <ConfirmDialog
         open={Boolean(deleting)}

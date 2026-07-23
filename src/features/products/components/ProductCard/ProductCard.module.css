@@ -81,15 +81,47 @@
 }
 
 /* ---- LARGE (galería) ---- */
+/* Altura FIJA para todas las cards: imagen 60% + info 40%, independientemente
+   del tamaño real de la imagen (así todas quedan alineadas y coherentes). */
 .large {
   display: flex;
   flex-direction: column;
+  height: 360px;
 }
 
+/* Alto FIJO (60%): la imagen nunca ocupa más, sin importar su tamaño real. */
 .cover {
   position: relative;
-  aspect-ratio: 4 / 3;
+  height: 60%;
+  flex-shrink: 0;
   background: var(--bg-tertiary);
+}
+
+/* Nombre con alto RESERVADO de 2 líneas: la fila de badge + íconos queda a la
+   misma altura en todas las cards. Nombre corto → queda el espacio libre debajo;
+   nombre muy largo → 2 líneas y al final "…". */
+.large .name {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.3;
+  height: 2.6em;
+  flex-shrink: 0;
+}
+
+/* Fila del badge de tipo con las acciones alineadas al final. */
+.badgeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.badgeRow .actions {
+  margin-left: auto;
 }
 
 .codeBadge {
@@ -107,6 +139,8 @@
 }
 
 .body {
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -119,6 +153,13 @@
   gap: var(--space-3);
   padding: var(--space-3);
   align-items: stretch;
+}
+
+/* En la card pequeña el nombre toma todo el ancho disponible (los íconos ahora
+   están en el menú kebab), truncando con "…" solo si de verdad no cabe. */
+.small .name {
+  flex: 1;
+  min-width: 0;
 }
 
 .thumb {

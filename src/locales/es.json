@@ -110,7 +110,15 @@
       "gallery": "Galería"
     },
     "card": {
-      "noImage": "Sin imagen"
+      "noImage": "Sin imagen",
+      "details": "Ver detalles"
+    },
+    "detail": {
+      "description": "Descripción",
+      "noDescription": "Sin descripción",
+      "images": "Imágenes del producto",
+      "prevImage": "Imagen anterior",
+      "nextImage": "Imagen siguiente"
     },
     "columns": {
       "code": "Código",
