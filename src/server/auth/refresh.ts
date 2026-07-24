@@ -32,6 +32,10 @@ export async function tryRefresh(): Promise<string | null> {
         method: "POST",
         headers: {
           "content-type": "application/json",
+          // La API valida el refresh token desde la cookie `refreshToken`
+          // (RefreshTokenGuard). Este Web es BFF: reenvía el token (guardado en su
+          // propia cookie httpOnly) como cookie para que el guard lo encuentre.
+          cookie: `refreshToken=${refreshToken}`,
         },
         body: JSON.stringify({ refreshToken }),
         cache: "no-store",
